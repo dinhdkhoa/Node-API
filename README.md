@@ -7,7 +7,7 @@ Setup & Config:
 ```
 yarn init
 yarn add express
-yarn add typescript @types/express @types/node --dev
+yarn add -D typescript @types/express @types/node
 ```
 
 2. Config
@@ -16,7 +16,7 @@ yarn add typescript @types/express @types/node --dev
 
 ```json
 {
- { "target": "ES6" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
+ { "target": "ES2022" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
     "module": "NodeNext" /* Specify what module code is generated. */,
     "moduleResolution": "node" /* Specify how TypeScript looks up a file from a given module specifier. */,
     "sourceMap": true /* Create source map files for emitted JavaScript files. */,
@@ -32,7 +32,7 @@ yarn add typescript @types/express @types/node --dev
 - nodemon.json
 
 ```
-yarn add nodemon prettier concurrently --dev
+yarn add -D nodemon prettier ts-node
 ```
 
 ```json
@@ -68,7 +68,7 @@ indent_style = space
 
 ```json
 "scripts": {
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
+    "dev": "nodemon",
     "prettier": "prettier --check \"src/**/(*.tsx|*.ts|*.css|*.scss|*.js)\"",
     "prettier:fix": "prettier --write \"src/**/(*.tsx|*.ts|*.css|*.scss|*.js)\""
   }
