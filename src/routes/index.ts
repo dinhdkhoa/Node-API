@@ -5,6 +5,6 @@ import userRouter from './user'
 const routes = Router()
 
 routes.use('/', authRouter)
-routes.use('/user', userRouter)
+routes.use('/users', userRouter)
 
 export default routes

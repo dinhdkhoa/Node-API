@@ -13,25 +13,23 @@ const UserSchema = new mongoose.Schema({
 
 export const UserModel = mongoose.model('user', UserSchema)
 
-export const getUsers = async () => {
-  const users = await UserModel.find()
-  return users
-}
-export const getUsersByEmail = async (email: string, login: boolean) => {
-  const user = login
+export const getUsers = async () => (await UserModel.find()) as User[]
+
+export const getUsersByEmail = async (email: string, login: boolean) =>
+  login
     ? ((await UserModel.findOne({ email }).select('+authentication.salt +authentication.password')) as User & Document)
     : ((await UserModel.findOne({ email })) as User & Document)
-  return user
+
+export const getUsersBySessionToken = async (sessionToken: string) => {
+  return (await UserModel.findOne({ 'authentication.sessionToken': sessionToken })) as User & Document
 }
 
-export const getUsersBySessionToken = async (sessionToken: string) => await UserModel.findOne({ sessionToken })
-
-export const getUserById = async (id: string) => await UserModel.findById({ id })
+export const getUserById = async (id: string) => (await UserModel.findById({ id })) as User & Document
 
 export const deleteUserById = async (id: string) => await UserModel.findByIdAndDelete({ _id: id })
 
 export const updateUserById = async (id: string, username: string) =>
-  await UserModel.findByIdAndUpdate({ _id: id }, { username })
+  (await UserModel.findByIdAndUpdate({ _id: id }, { username })) as User & Document
 
 export const createUser = async (user: User) => {
   const newUser = new UserModel(user)
