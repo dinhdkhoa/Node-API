@@ -18,6 +18,9 @@ yarn add -D typescript @types/express @types/node
 {
  { "target": "ES2022" /* Set the JavaScript language version for emitted JavaScript and include compatible library declarations. */,
     "module": "NodeNext" /* Specify what module code is generated. */,
+    "paths": {
+      "types/*": ["./@types/*"]
+    } /* Specify a set of entries that re-map imports to additional lookup locations. */
     "moduleResolution": "node" /* Specify how TypeScript looks up a file from a given module specifier. */,
     "sourceMap": true /* Create source map files for emitted JavaScript files. */,
     "baseUrl": "src" /* Specify the base directory to resolve non-relative module names. */,

@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose, { Document } from 'mongoose'
 import { User } from 'types/user'
 
 const UserSchema = new mongoose.Schema({
@@ -11,20 +11,30 @@ const UserSchema = new mongoose.Schema({
   }
 })
 
-export const UserModel = mongoose.model('Course', UserSchema)
+export const UserModel = mongoose.model('user', UserSchema)
 
 export const getUsers = async () => {
   const users = await UserModel.find()
   return users
 }
-export const getUsersByEmail = async (email: string) => await UserModel.findOne({ email })
-export const getUsersBySessionToken = async (sessionToken: string) => await UserModel.findOne({ sessionToken })
-export const getUserById = async (id: string) => await UserModel.findById({ id })
-export const deleteUserById = async (id: string) => await UserModel.findByIdAndDelete({ _id: id })
-export const updateUserById = async (id: string, username: string) =>
-  await UserModel.findById({ _id: id }, { username })
-export const createUser = async (reqBody: User) => {
-  const user = new UserModel(reqBody)
-  await user.save()
+export const getUsersByEmail = async (email: string, login: boolean) => {
+  const user = login
+    ? ((await UserModel.findOne({ email }).select('+authentication.salt +authentication.password')) as User & Document)
+    : ((await UserModel.findOne({ email })) as User & Document)
   return user
+}
+
+export const getUsersBySessionToken = async (sessionToken: string) => await UserModel.findOne({ sessionToken })
+
+export const getUserById = async (id: string) => await UserModel.findById({ id })
+
+export const deleteUserById = async (id: string) => await UserModel.findByIdAndDelete({ _id: id })
+
+export const updateUserById = async (id: string, username: string) =>
+  await UserModel.findByIdAndUpdate({ _id: id }, { username })
+
+export const createUser = async (user: User) => {
+  const newUser = new UserModel(user)
+  await newUser.save()
+  return newUser
 }
