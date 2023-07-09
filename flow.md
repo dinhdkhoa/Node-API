@@ -66,3 +66,21 @@ Tạo middleware để check authenticated user cho users route
 - lấy user từ sessionToken - k có trả về 403
 - merge(req, {identity: existingUser})
 - return next()
+
+Dùng middleware isAuthenticated để check isOwner
+
+- isOwner: nhận (req: Request, res: Response, next: NextFunction)
+- lấy id từ params
+- lấy accountId từ existing user đã merge trong isAuthenticated bằng \
+  ` const accountId: string = get(req, 'identity._id') || ''`
+- ` if (accountId.toString() !== id) return res.sendStatus(400)`
+- return next()
+
+Trong userRouter:
+
+```js
+userRouter
+  .route('/:id')
+  .delete(isAuthenticated, isOwner, userController.deleteUser)
+  .patch(isAuthenticated, isOwner, userController.updateUsername)
+```
